@@ -42,6 +42,8 @@ module.exports.install = function (Vue, options = {}) {
             tFailColor: '',
             tColor: '',
             timer: null,
+            hideTimer: null,
+            hideRevertTimer: null,
             cut: 0
         },
         init (vm) {
@@ -55,6 +57,8 @@ module.exports.install = function (Vue, options = {}) {
             this.$vm.RADON_LOADING_BAR.options.canSuccess = true
             this.state.cut = 10000 / Math.floor(time)
             clearInterval(this.state.timer)
+            clearInterval(this.state.hideTimer)
+            clearInterval(this.state.hideRevertTimer)
             this.state.timer = setInterval(() => {
                 this.increase(this.state.cut * Math.random())
                 if (this.$vm.RADON_LOADING_BAR.percent > 95) {
@@ -82,11 +86,11 @@ module.exports.install = function (Vue, options = {}) {
             setTimeout(() => {
                 this.$vm.RADON_LOADING_BAR.options.show = false
                 Vue.nextTick(() => {
-                    setTimeout(() => {
+                    this.state.hideTimer = setTimeout(() => {
                         this.$vm.RADON_LOADING_BAR.percent = 0
                     }, 100)
                     if (this.$vm.RADON_LOADING_BAR.options.autoRevert) {
-                        setTimeout(() => {
+                        this.state.hideRevertTimer = setTimeout(() => {
                             this.revert()
                         }, 300)
                     }
