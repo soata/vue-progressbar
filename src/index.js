@@ -43,6 +43,7 @@ module.exports.install = function (Vue, options = {}) {
             tColor: '',
             timer: null,
             hideTimer: null,
+            hidePercentTimer: null,
             hideRevertTimer: null,
             cut: 0
         },
@@ -58,6 +59,7 @@ module.exports.install = function (Vue, options = {}) {
             this.state.cut = 10000 / Math.floor(time)
             clearInterval(this.state.timer)
             clearInterval(this.state.hideTimer)
+            clearInterval(this.state.hidePercentTimer)
             clearInterval(this.state.hideRevertTimer)
             this.state.timer = setInterval(() => {
                 this.increase(this.state.cut * Math.random())
@@ -83,10 +85,10 @@ module.exports.install = function (Vue, options = {}) {
         hide () {
             clearInterval(this.state.timer)
             this.state.timer = null
-            setTimeout(() => {
+            this.state.hideTimer = setTimeout(() => {
                 this.$vm.RADON_LOADING_BAR.options.show = false
                 Vue.nextTick(() => {
-                    this.state.hideTimer = setTimeout(() => {
+                    this.state.hidePercentTimer = setTimeout(() => {
                         this.$vm.RADON_LOADING_BAR.percent = 0
                     }, 100)
                     if (this.$vm.RADON_LOADING_BAR.options.autoRevert) {
